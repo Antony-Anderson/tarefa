@@ -24,6 +24,7 @@ files.keys().map(key => app.component(key.split('/').pop().split('.')[0], files(
 
 app.mount('#app');
 
+app.config.globalProperties.$eventBus = emitter;
 app.config.globalProperties.$auth = new Auth();
 app.config.globalProperties.$formValidation = new FormValidation();
 app.config.globalProperties.$formater = new Formater();

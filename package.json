@@ -19,12 +19,14 @@
     "dependencies": {
         "@devindex/vue-mask": "^2.0.3",
         "@vitejs/plugin-vue": "^4.4.0",
+        "jquery": "^3.7.1",
         "mitt": "^3.0.1",
         "v-money3": "^3.24.1",
         "vue": "^3.2.36",
         "vue-router": "^4.3.3",
-        "vue-sweetalert2": "^5.0.5",
+        "vue-sweetalert2": "^5.0.11",
         "vue-toasted": "^1.1.28",
+        "vue-toggles": "^2.1.0",
         "vue3-toastify": "^0.2.1"
     }
 }

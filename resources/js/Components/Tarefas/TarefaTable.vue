@@ -8,6 +8,7 @@
                     <th scope="col">Data</th>
                     <th scope="col">Ativo</th>
                     <th scope="col">Ativar</th>
+                    <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,10 +20,17 @@
                     <td>
                         <VueToggles v-model="dado.ativo" @click="ativo(dado.id)" :height="21" :width="44"/>
                     </td>
+                    <td>
+                        <button @click="editar(dado.id)" class="btn btn-primary">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
+                        <button @click="destroy(dado.id)" class="btn btn-danger ml-2">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <logout></logout>
     </div>
 </template>
 
@@ -69,11 +77,17 @@ export default{
             axios.post(`api/tarefas/${id}/ativo`)
             .then(response => {
                 this.getDados();
-                console.log(response.data)
+                this.$toasty.success(response.data.message);
             })
             .catch(error => {
                 this.$auth.userNotAllowed(error);
             });
+        },
+        editar(id){
+            this.$eventBus.emit("editar-tarefa", id);
+        },
+        destroy(id){
+            this.$eventBus.emit("remover-tarefa", id);
         }
     }
 }

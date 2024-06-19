@@ -20758,14 +20758,71 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       axios.post('api/tarefas/store', this.formData).then(function (response) {
         _this.$refs.modal.close();
+        _this.$toasty.success(response.data.message);
         _this.$eventBus.emit("atualizar-tabela-tarefa");
-        console.log(response.data.data);
       })["catch"](function (error) {
-        console.log('caiu no error');
         _this.$auth.userNotAllowed(error);
         _this.errors = error.response.data.errors;
       })["finally"](function () {
         _this.loading = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=script&lang=js":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=script&lang=js ***!
+  \***************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      tarefaId: null
+    };
+  },
+  created: function created() {
+    var self = this;
+    this.$eventBus.on("remover-tarefa", function (id) {
+      self.tarefaId = id;
+      self.confirmDestroy();
+    });
+  },
+  beforeUnmount: function beforeUnmount() {
+    this.$eventBus.off("remover-tarefa");
+  },
+  methods: {
+    destroy: function destroy() {
+      var _this = this;
+      axios["delete"]('api/tarefas/' + this.tarefaId + '/destroy').then(function (response) {
+        _this.$toasty.success(response.data.message);
+        _this.$eventBus.emit("atualizar-tabela-tarefa");
+      })["catch"](function (error) {
+        _this.$auth.userNotAllowed(error);
+        _this.$toasty.error(response.data.message);
+      });
+    },
+    confirmDestroy: function confirmDestroy() {
+      var _this2 = this;
+      this.$swal.fire({
+        title: "Deseja remover esta tarefa?",
+        showCancelButton: true,
+        confirmButtonText: "Remover",
+        reverseButtons: true,
+        confirmButtonColor: "#d33"
+      }).then(function (result) {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          _this2.destroy();
+        }
       });
     }
   }
@@ -20853,7 +20910,79 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
       axios.post("api/tarefas/".concat(id, "/ativo")).then(function (response) {
         _this2.getDados();
-        console.log(response.data);
+        _this2.$toasty.success(response.data.message);
+      })["catch"](function (error) {
+        _this2.$auth.userNotAllowed(error);
+      });
+    },
+    editar: function editar(id) {
+      this.$eventBus.emit("editar-tarefa", id);
+    },
+    destroy: function destroy(id) {
+      this.$eventBus.emit("remover-tarefa", id);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=script&lang=js":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=script&lang=js ***!
+  \**************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      formData: {
+        nome: null,
+        descricao: null,
+        data: null,
+        ativo: null
+      },
+      tarefaId: null,
+      loading: false,
+      errors: []
+    };
+  },
+  created: function created() {
+    var self = this;
+    this.$eventBus.on("editar-tarefa", function (id) {
+      self.$formValidation.clearAll(Object.keys(self.formData), 'update_tarefa');
+      self.tarefaId = id;
+      self.getDados();
+    });
+  },
+  beforeUnmount: function beforeUnmount() {
+    this.$eventBus.off("editar-tarefa");
+  },
+  methods: {
+    enviar: function enviar() {
+      var _this = this;
+      this.$formValidation.clearAll(Object.keys(this.formData), 'update_tarefa');
+      this.loading = true;
+      axios.put('api/tarefas/' + this.tarefaId + '/update', this.formData).then(function (response) {
+        _this.$refs.modal.close();
+        _this.$toasty.success(response.data.message);
+        _this.$eventBus.emit("atualizar-tabela-tarefa");
+      })["catch"](function (error) {
+        _this.$auth.userNotAllowed(error);
+        _this.errors = error.response.data.errors;
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    },
+    getDados: function getDados() {
+      var _this2 = this;
+      axios.get('api/tarefas/' + this.tarefaId + '/show').then(function (response) {
+        _this2.formData = response.data.data;
+        _this2.$refs.modal.open();
       })["catch"](function (error) {
         _this2.$auth.userNotAllowed(error);
       });
@@ -20951,12 +21080,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-primary",
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    "class": "dropdown-item",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.logout();
     })
-  }, "Logout")]);
+  }, "Sair")]);
 }
 
 /***/ }),
@@ -21162,6 +21291,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=template&id=6cac5826":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=template&id=6cac5826 ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div");
+}
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaForm.vue?vue&type=template&id=4b5c763e":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaForm.vue?vue&type=template&id=4b5c763e ***!
@@ -21294,14 +21442,25 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   scope: "col"
 }, "Ativo"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col"
-}, "Ativar")])], -1 /* HOISTED */);
+}, "Ativar"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col"
+}, "Ações")])], -1 /* HOISTED */);
 var _hoisted_4 = {
   scope: "row"
 };
 var _hoisted_5 = ["innerHTML"];
+var _hoisted_6 = ["onClick"];
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fa-solid fa-pencil"
+}, null, -1 /* HOISTED */);
+var _hoisted_8 = [_hoisted_7];
+var _hoisted_9 = ["onClick"];
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fa-solid fa-trash"
+}, null, -1 /* HOISTED */);
+var _hoisted_11 = [_hoisted_10];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VueToggles = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("VueToggles");
-  var _component_logout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("logout");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dados, function (dado) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: 'tarefa_item' + dado.id
@@ -21317,8 +21476,80 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       },
       height: 21,
       width: 44
-    }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "onClick"])])]);
-  }), 128 /* KEYED_FRAGMENT */))])], 512 /* NEED_PATCH */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_logout)]);
+    }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "onClick"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.editar(dado.id);
+      },
+      "class": "btn btn-primary"
+    }, [].concat(_hoisted_8), 8 /* PROPS */, _hoisted_6), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.destroy(dado.id);
+      },
+      "class": "btn btn-danger ml-2"
+    }, [].concat(_hoisted_11), 8 /* PROPS */, _hoisted_9)])]);
+  }), 128 /* KEYED_FRAGMENT */))])], 512 /* NEED_PATCH */)]);
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=template&id=8262cdb4":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=template&id=8262cdb4 ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
+  "class": "modal-title"
+}, "Editar tarefa", -1 /* HOISTED */);
+var _hoisted_2 = ["disabled"];
+var _hoisted_3 = {
+  key: 0,
+  "class": "spinner-border spinner-border-sm mr-2",
+  role: "status",
+  "aria-hidden": "true"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_tarefa_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("tarefa-form");
+  var _component_modal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modal");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modal, {
+    ref: "modal"
+  }, {
+    modalHeader: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_1];
+    }),
+    modalFooter: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        onClick: _cache[0] || (_cache[0] = function ($event) {
+          return _ctx.$refs.modal.close();
+        }),
+        type: "button",
+        "class": "btn btn-secondary",
+        "data-bs-dismiss": "modal"
+      }, "Fechar"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        onClick: _cache[1] || (_cache[1] = function ($event) {
+          return $options.enviar();
+        }),
+        type: "button",
+        "class": "btn btn-primary",
+        disabled: $data.loading
+      }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_3)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Salvar ")], 8 /* PROPS */, _hoisted_2)];
+    }),
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_tarefa_form, {
+        formData: $data.formData,
+        errors: $data.errors,
+        idComponent: "update_tarefa"
+      }, null, 8 /* PROPS */, ["formData", "errors"])];
+    }),
+    _: 1 /* STABLE */
+  }, 512 /* NEED_PATCH */)]);
 }
 
 /***/ }),
@@ -21873,6 +22104,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/Components/Tarefas/TarefaDestroy.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/Components/Tarefas/TarefaDestroy.vue ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _TarefaDestroy_vue_vue_type_template_id_6cac5826__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TarefaDestroy.vue?vue&type=template&id=6cac5826 */ "./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=template&id=6cac5826");
+/* harmony import */ var _TarefaDestroy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TarefaDestroy.vue?vue&type=script&lang=js */ "./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TarefaDestroy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TarefaDestroy_vue_vue_type_template_id_6cac5826__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Components/Tarefas/TarefaDestroy.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/Components/Tarefas/TarefaForm.vue":
 /*!********************************************************!*\
   !*** ./resources/js/Components/Tarefas/TarefaForm.vue ***!
@@ -21921,6 +22180,34 @@ __webpack_require__.r(__webpack_exports__);
 
 ;
 const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TarefaTable_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TarefaTable_vue_vue_type_template_id_dfbb7efe__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Components/Tarefas/TarefaTable.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./resources/js/Components/Tarefas/TarefaUpdate.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/Components/Tarefas/TarefaUpdate.vue ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _TarefaUpdate_vue_vue_type_template_id_8262cdb4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TarefaUpdate.vue?vue&type=template&id=8262cdb4 */ "./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=template&id=8262cdb4");
+/* harmony import */ var _TarefaUpdate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TarefaUpdate.vue?vue&type=script&lang=js */ "./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TarefaUpdate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TarefaUpdate_vue_vue_type_template_id_8262cdb4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Components/Tarefas/TarefaUpdate.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -22009,6 +22296,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=script&lang=js":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaDestroy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaDestroy_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./TarefaDestroy.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/Components/Tarefas/TarefaForm.vue?vue&type=script&lang=js":
 /*!********************************************************************************!*\
   !*** ./resources/js/Components/Tarefas/TarefaForm.vue?vue&type=script&lang=js ***!
@@ -22037,6 +22340,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaTable_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaTable_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./TarefaTable.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaTable.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=script&lang=js":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaUpdate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaUpdate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./TarefaUpdate.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=script&lang=js");
  
 
 /***/ }),
@@ -22121,6 +22440,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=template&id=6cac5826":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=template&id=6cac5826 ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaDestroy_vue_vue_type_template_id_6cac5826__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaDestroy_vue_vue_type_template_id_6cac5826__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./TarefaDestroy.vue?vue&type=template&id=6cac5826 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaDestroy.vue?vue&type=template&id=6cac5826");
+
+
+/***/ }),
+
 /***/ "./resources/js/Components/Tarefas/TarefaForm.vue?vue&type=template&id=4b5c763e":
 /*!**************************************************************************************!*\
   !*** ./resources/js/Components/Tarefas/TarefaForm.vue?vue&type=template&id=4b5c763e ***!
@@ -22149,6 +22484,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaTable_vue_vue_type_template_id_dfbb7efe__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaTable_vue_vue_type_template_id_dfbb7efe__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./TarefaTable.vue?vue&type=template&id=dfbb7efe */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaTable.vue?vue&type=template&id=dfbb7efe");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=template&id=8262cdb4":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=template&id=8262cdb4 ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaUpdate_vue_vue_type_template_id_8262cdb4__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_TarefaUpdate_vue_vue_type_template_id_8262cdb4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./TarefaUpdate.vue?vue&type=template&id=8262cdb4 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/Tarefas/TarefaUpdate.vue?vue&type=template&id=8262cdb4");
 
 
 /***/ }),
@@ -22422,8 +22773,10 @@ var map = {
 	"./Auth/RegisterForm.vue": "./resources/js/Components/Auth/RegisterForm.vue",
 	"./Modal.vue": "./resources/js/Components/Modal.vue",
 	"./Tarefas/TarefaCreate.vue": "./resources/js/Components/Tarefas/TarefaCreate.vue",
+	"./Tarefas/TarefaDestroy.vue": "./resources/js/Components/Tarefas/TarefaDestroy.vue",
 	"./Tarefas/TarefaForm.vue": "./resources/js/Components/Tarefas/TarefaForm.vue",
-	"./Tarefas/TarefaTable.vue": "./resources/js/Components/Tarefas/TarefaTable.vue"
+	"./Tarefas/TarefaTable.vue": "./resources/js/Components/Tarefas/TarefaTable.vue",
+	"./Tarefas/TarefaUpdate.vue": "./resources/js/Components/Tarefas/TarefaUpdate.vue"
 };
 
 

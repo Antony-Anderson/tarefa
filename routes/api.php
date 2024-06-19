@@ -15,7 +15,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     ->prefix('tarefas')
     ->group(function () {
         Route::get('/', 'index');
+        Route::get('{tarefa}/show', 'show');
         Route::post('store', 'store');
+        Route::delete('{tarefa}/destroy', 'destroy');
+        Route::put('{tarefa}/update', 'update');
         Route::post('{tarefa}/ativo', 'ativo');
     });
 

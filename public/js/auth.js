@@ -20841,7 +20841,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue_toggles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-toggles */ "./node_modules/vue-toggles/dist/vue-toggles.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    VueToggles: vue_toggles__WEBPACK_IMPORTED_MODULE_0__.VueToggles
+  },
   props: ['formData', 'idComponent', 'errors'],
   data: function data() {
     return {
@@ -21351,16 +21356,8 @@ var _hoisted_11 = {
 var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "form-label"
 }, "Ativo", -1 /* HOISTED */);
-var _hoisted_13 = ["id"];
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-  value: "1",
-  selected: ""
-}, "Sim", -1 /* HOISTED */);
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-  value: "0"
-}, "Não", -1 /* HOISTED */);
-var _hoisted_16 = [_hoisted_14, _hoisted_15];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_VueToggles = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("VueToggles");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: $props.idComponent + 'nome',
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
@@ -21396,16 +21393,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_9), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $props.formData.data]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "invalid-feedback",
     id: $props.idComponent + 'data-invalid-feedback'
-  }, null, 8 /* PROPS */, _hoisted_10)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
-    name: "ativo",
+  }, null, 8 /* PROPS */, _hoisted_10)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueToggles, {
+    modelValue: $props.formData.ativo,
     "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return $props.formData.ativo = $event;
     }),
     id: $props.idComponent + 'ativo',
+    height: 21,
+    width: 44,
     onInput: _cache[7] || (_cache[7] = function ($event) {
       return _ctx.$formValidation.clear('ativo', $props.idComponent);
     })
-  }, [].concat(_hoisted_16), 40 /* PROPS, NEED_HYDRATION */, _hoisted_13), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $props.formData.ativo]])])]);
+  }, null, 8 /* PROPS */, ["modelValue", "id"])])]);
 }
 
 /***/ }),

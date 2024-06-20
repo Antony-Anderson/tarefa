@@ -16,16 +16,17 @@
         </div>
          <div class="mb-3">
             <label class="form-label">Ativo</label>
-            <select name="ativo" v-model="formData.ativo" :id="idComponent+'ativo'" @input="$formValidation.clear('ativo', idComponent)">
-                <option value="1" selected>Sim</option>
-                <option value="0">Não</option>
-            </select>
+            <VueToggles v-model="formData.ativo" :id="idComponent+'ativo'" :height="21" :width="44" @input="$formValidation.clear('ativo', idComponent)"/>
         </div>
     </div>
 </template>
 
 <script>
+    import { VueToggles } from "vue-toggles";
     export default {
+        components:{
+            VueToggles
+        },
         props:[
             'formData',
             'idComponent',

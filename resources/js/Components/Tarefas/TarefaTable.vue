@@ -1,6 +1,7 @@
 <template>
     <div class="table-responsive">
-        <table class="table" ref="table">
+        <table-skeleton v-if="loading"></table-skeleton>
+        <table class="table" ref="table" v-else>
             <thead class="table-dark">
                 <tr>
                     <th scope="col">Nome</th>
@@ -29,6 +30,9 @@
                         </button>
                     </td>
                 </tr>
+                <tr v-if="!dados.length">
+                    <td colspan="6">Nenhuma tarefa encontrada</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -43,6 +47,7 @@ export default{
     data(){
         return{
             dados:[],
+            loading:true
         }
     },
     created(){
@@ -57,6 +62,7 @@ export default{
     },
     methods:{
         getDados(){
+            this.loading = true
             axios.get('api/tarefas')
             .then(response => {
                 this.dados = response.data.data;
@@ -64,6 +70,8 @@ export default{
             })
             .catch(error => {
                 this.$auth.userNotAllowed(error);
+            }).finally(() => {
+                this.loading = false
             })
         },
         formaterAtivo(ativo){

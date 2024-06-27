@@ -24,7 +24,7 @@
                     nome:null,
                     descricao:null,
                     data:null,
-                    ativo:null
+                    ativo:false
                 },
                 loading:false,
                 errors:[]

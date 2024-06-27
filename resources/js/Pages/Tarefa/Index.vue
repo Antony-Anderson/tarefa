@@ -7,9 +7,12 @@
                     <i class="fa-solid fa-list-check"></i>
                     Tarefas
                 </h6>
-                <button @click="$eventBus.emit('criar-tarefa')" class="btn btn-primary">
-                    Nova
-                </button>
+                <div class="ms-auto d-flex">
+                    <button @click="$eventBus.emit('criar-tarefa')" class="btn btn-primary justify-content-between me-2">
+                        Nova
+                    </button>
+                    <button @click="$eventBus.emit('selecionar-tarefas')" class="btn btn-success">Excluir todas as tarefas concluidas</button>
+                </div>
             </div>
 
             <!-- Card Body -->

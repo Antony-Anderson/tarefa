@@ -18,6 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('{tarefa}/show', 'show');
         Route::post('store', 'store');
         Route::delete('{tarefa}/destroy', 'destroy');
+        Route::delete('destroyAll', 'destroyAll');
         Route::put('{tarefa}/update', 'update');
         Route::post('{tarefa}/ativo', 'ativo');
     });

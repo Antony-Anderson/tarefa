@@ -8,7 +8,7 @@
                     <th scope="col">Descrição</th>
                     <th scope="col">Data</th>
                     <th scope="col">Ativo</th>
-                    <th scope="col">Ativar</th>
+                    <th scope="col">Concluida</th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
@@ -22,10 +22,10 @@
                         <VueToggles v-model="dado.ativo" @click="ativo(dado.id)" :height="21" :width="44"/>
                     </td>
                     <td>
-                        <button @click="editar(dado.id)" class="btn btn-primary">
+                        <button @click="editar(dado.id)" class="btn btn-primary me-2">
                             <i class="fa-solid fa-pencil"></i>
                         </button>
-                        <button @click="destroy(dado.id)" class="btn btn-danger ml-2">
+                        <button @click="destroy(dado.id)" class="btn btn-danger">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -52,9 +52,15 @@ export default{
     },
     created(){
         this.getDados();
-         let self = this;
-         this.$eventBus.on("atualizar-tabela-tarefa", function(){
+        let self = this;
+        this.$eventBus.on("atualizar-tabela-tarefa", function(){
             self.getDados();
+        });
+    },
+    mounted(){
+        let self = this;
+        self.$eventBus.on("selecionar-tarefas", function(){
+            self.confirmDestroy();
         });
     },
     beforeUnmount(){
@@ -96,6 +102,31 @@ export default{
         },
         destroy(id){
             this.$eventBus.emit("remover-tarefa", id);
+        },
+        destroyAll(){
+            axios.delete('api/tarefas/destroyAll')
+            .then(response => {
+                this.$toasty.success(response.data.message);
+                this.$eventBus.emit("atualizar-tabela-tarefa");
+            })
+            .catch(error => {
+                this.$auth.userNotAllowed(error);
+                this.$toasty.error(response.data.message);
+            });
+        },
+        confirmDestroy(){
+            this.$swal.fire({
+                title: "Deseja remover todas as tarefas?",
+                showCancelButton: true,
+                confirmButtonText: "Remover",
+                reverseButtons: true,
+                confirmButtonColor: "#198754",
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        this.destroyAll()
+                    }
+            });
         }
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Tarefa;
 use App\Services\Response;
 use App\Http\Requests\Tarefa\StoreRequest;
 use App\Http\Requests\Tarefa\UpdateRequest;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -43,5 +44,16 @@ class TarefaController extends Controller
     public function update(UpdateRequest $request, Tarefa $tarefa){
         $tarefa->update($request->all());
         return Response::success('Tarefa atualizada com sucesso!');
+    }
+
+    public function destroyAll(){
+        $tarefas = Tarefa::where('user_id', Auth::user()->id)->get();
+      
+        foreach($tarefas as $tarefa){
+            if($tarefa->ativo == true){
+                $tarefa->delete();
+            }
+        }
+        return Response::success('Todas as tarefas concluidas removidas com sucesso!');
     }
 }

@@ -20892,6 +20892,12 @@ __webpack_require__.r(__webpack_exports__);
       self.getDados();
     });
   },
+  mounted: function mounted() {
+    var self = this;
+    self.$eventBus.on("selecionar-tarefas", function () {
+      self.confirmDestroy();
+    });
+  },
   beforeUnmount: function beforeUnmount() {
     this.$eventBus.off("atualizar-tabela-tarefa");
   },
@@ -20929,6 +20935,31 @@ __webpack_require__.r(__webpack_exports__);
     },
     destroy: function destroy(id) {
       this.$eventBus.emit("remover-tarefa", id);
+    },
+    destroyAll: function destroyAll() {
+      var _this3 = this;
+      axios["delete"]('api/tarefas/destroyAll').then(function (response) {
+        _this3.$toasty.success(response.data.message);
+        _this3.$eventBus.emit("atualizar-tabela-tarefa");
+      })["catch"](function (error) {
+        _this3.$auth.userNotAllowed(error);
+        _this3.$toasty.error(response.data.message);
+      });
+    },
+    confirmDestroy: function confirmDestroy() {
+      var _this4 = this;
+      this.$swal.fire({
+        title: "Deseja remover todas as tarefas?",
+        showCancelButton: true,
+        confirmButtonText: "Remover",
+        reverseButtons: true,
+        confirmButtonColor: "#198754"
+      }).then(function (result) {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          _this4.destroyAll();
+        }
+      });
     }
   }
 });
@@ -21521,7 +21552,7 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   scope: "col"
 }, "Ativo"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col"
-}, "Ativar"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+}, "Concluida"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col"
 }, "Ações")])], -1 /* HOISTED */);
 var _hoisted_4 = {
@@ -21569,12 +21600,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: function onClick($event) {
         return $options.editar(dado.id);
       },
-      "class": "btn btn-primary"
+      "class": "btn btn-primary me-2"
     }, [].concat(_hoisted_8), 8 /* PROPS */, _hoisted_6), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       onClick: function onClick($event) {
         return $options.destroy(dado.id);
       },
-      "class": "btn btn-danger ml-2"
+      "class": "btn btn-danger"
     }, [].concat(_hoisted_11), 8 /* PROPS */, _hoisted_9)])]);
   }), 128 /* KEYED_FRAGMENT */)), !$data.dados.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_12, [].concat(_hoisted_14))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 512 /* NEED_PATCH */))]);
 }

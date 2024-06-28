@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TarefaController;
 
 Route::post('/register', [AuthController::class, 'store']);
@@ -21,6 +22,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('destroyAll', 'destroyAll');
         Route::put('{tarefa}/update', 'update');
         Route::post('{tarefa}/ativo', 'ativo');
+    });
+
+    Route::controller(PerfilController::class)
+    ->prefix('perfil')
+    ->group(function () {
+        Route::get('/', 'profile');
+        Route::post('mudarSenha', 'mudarSenha');
     });
 
 });

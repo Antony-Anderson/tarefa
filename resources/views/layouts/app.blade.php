@@ -32,31 +32,32 @@
     <!-- Page Wrapper -->
     <div id="app">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <router-link :to="{name: 'Tarefa'}" class="navbar-brand">Tarefa</router-link>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Alterna navegação">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Perfil
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            {{-- <a class="dropdown-item" href="#">Profile</a> --}}
-                            {{-- <router-link :to="{name: 'Tarefa'}"  class="dropdown-item">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                tarefas
-                            </router-link> --}}
-                            <logout></logout>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <div style="margin-left: 20px">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <router-link :to="{name: 'Tarefa'}" class="navbar-brand">Tarefa</router-link>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Perfil
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                {{-- <a class="dropdown-item" href="#">Profile</a> --}}
+                                {{-- <router-link :to="{name: 'Tarefa'}"  class="dropdown-item">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    tarefas
+                                </router-link> --}}
+                                <router-link :to="{name: 'Tarefa'}"  class="dropdown-item">Tarefa</router-link>
+                                <router-link :to="{name: 'Perfil'}"  class="dropdown-item">Perfil</router-link>
+                                <logout></logout>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    
 
         <div id="wrapper">
             <div class="container-fluid">

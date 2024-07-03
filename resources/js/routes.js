@@ -2,6 +2,7 @@
 import Tarefa from './Pages/Tarefa/Index.vue';
 import Perfil from './Pages/Perfil/Index.vue';
 import Pomodoro from './Pages/Pomodoro/Index.vue';
+import Erro404 from './Pages/Erros/Erro404.vue';
 
 function beforeEnter(next){
     let token = localStorage.getItem('token');
@@ -13,6 +14,17 @@ function beforeEnter(next){
 }
 
 const routes = [
+    {
+      path: "/:catchAll(.*)",
+      component: Erro404,
+      beforeEnter: (to, from, next) => beforeEnter(next)
+    },
+    {
+      path: '/404',
+      name: 'erro404',
+      component: Erro404,
+      beforeEnter: (to, from, next) => beforeEnter(next)
+    },
     {
       path: "/",
       component: Tarefa,

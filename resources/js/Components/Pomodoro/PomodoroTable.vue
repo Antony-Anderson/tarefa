@@ -4,6 +4,7 @@
         <button @click="pauseTime()" class="btn btn-danger" v-else><i class="fa-solid fa-pause"></i> Pausar</button>
         <button @click="endTime()" class="btn btn-danger"><i class="fa-solid fa-stop"></i> Parar</button>
         <span>{{ formatTime(this.formData.tempo) }}</span>
+
         <div class="col-md-3">
             <div class="form-floating">
                 <input type="text" class="form-control" id="floatingInputGrid" v-model="tarefa">
@@ -11,8 +12,12 @@
             </div>
         </div>
 
+        <div class="d-flex justify-content-end" style="margin-left: 50px;">
+            <button @click="confirmDestroy()" class="btn btn-success">Apagar todas as tarefas</button>
+        </div>
+
         <table class="table">
-            <thead>
+            <thead class="table-dark">
                 <tr>
                     <th scope="col">Descrição</th>
                     <th scope="col">Tempo</th>
@@ -28,6 +33,9 @@
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
+                </tr>
+                 <tr v-if="!dados.length">
+                    <td colspan="6">Nenhuma tarefa encontrada</td>
                 </tr>
             </tbody>
         </table>
@@ -106,10 +114,36 @@
                 .finally(() => {
                     this.clicado = false;
                     this.concluida = true;
+                    this.tarefa = '';
+                    this.formData.tempo = 0;
                 });
             },
             destroy(id){
                 this.$eventBus.emit("remover-pomodoro", id);
+            },
+            destroyAll(){
+                axios.delete('api/pomodoro/deleteAll')
+                .then(response => {
+                    this.$toasty.success(response.data.message);
+                    this.$eventBus.emit("atualizar-tabela-pomodoro");
+                })
+                .catch(error => {
+                    this.$auth.userNotAllowed(error);
+                });
+            },
+            confirmDestroy(){
+                this.$swal.fire({
+                    title: "Deseja remover esta tarefa?",
+                    showCancelButton: true,
+                    confirmButtonText: "Remover",
+                    reverseButtons: true,
+                    confirmButtonColor: "#d33",
+                    }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            this.destroyAll()
+                        }
+                });
             },
             formatTime(seconds) {
                 let horas = Math.floor(seconds / 3600);

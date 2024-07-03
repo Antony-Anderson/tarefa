@@ -28,4 +28,12 @@ class PomodoroController extends Controller
         $pomodoro->delete();
         return Response::success('Tarefa removida com sucesso!');  
     }
+
+    public function deleteAll(){
+        $tarefas = Pomodoro::where('user_id', Auth::user()->id)->get();
+        foreach($tarefas as $tarefa){
+            $tarefa->delete();
+        }
+        return Response::success('Todas as tarefas concluidas removidas com sucesso!');
+    }
 }

@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', 'index');
         Route::post('store', 'store');
         Route::delete('{pomodoro}/destroy', 'destroy');
+        Route::delete('deleteAll', 'deleteAll');
     });
 
 });

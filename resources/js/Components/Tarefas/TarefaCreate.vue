@@ -33,7 +33,7 @@
         mounted(){
             let self = this;
             self.$eventBus.on("criar-tarefa", function(){
-                  self.$refs.modal.open();
+                self.$refs.modal.open();
                 self.$formValidation.clearAll(Object.keys(self.formData), 'create_tarefa');
             });
         },

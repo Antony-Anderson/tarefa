@@ -35,6 +35,7 @@
         <div style="margin-left: 20px">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <router-link :to="{name: 'Tarefa'}" class="navbar-brand">Tarefa</router-link>
+                <router-link :to="{name: 'Pomodoro'}" class="navbar-brand">Pomodoro</router-link>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">

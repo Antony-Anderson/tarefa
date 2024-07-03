@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\PomodoroController;
 use App\Http\Controllers\TarefaController;
 
 Route::post('/register', [AuthController::class, 'store']);
@@ -29,6 +30,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     ->group(function () {
         Route::get('/', 'profile');
         Route::post('mudarSenha', 'mudarSenha');
+    });
+
+    Route::controller(PomodoroController::class)
+    ->prefix('pomodoro')
+    ->group(function () {
+        Route::get('/', 'index');
+        Route::post('store', 'store');
+        Route::delete('{pomodoro}/destroy', 'destroy');
     });
 
 });
